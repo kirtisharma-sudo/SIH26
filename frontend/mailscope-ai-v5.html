@@ -82,6 +82,7 @@ a{color:inherit;}
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);}
 .section-title{font-size:14.5px;font-weight:700;}
+.section-title svg{width:16px;height:16px;flex-shrink:0;vertical-align:-3px;margin-right:2px;}
 .section-sub{font-size:12px;color:var(--text-tertiary);margin-top:2px;}
 
 /* slim stat strip instead of heavy KPI cards */
@@ -266,16 +267,23 @@ td.score-cell{font-family:'JetBrains Mono',monospace;font-weight:700;}
 .map-fullscreen-btn{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-secondary);background:var(--surface-soft);border:1px solid var(--border);border-radius:999px;padding:6px 12px;cursor:pointer;transition:border-color .15s ease,color .15s ease;}
 .map-fullscreen-btn:hover{border-color:var(--border-strong);color:var(--text);}
 .map-fullscreen-btn svg{width:13px;height:13px;}
-.map-canvas-wrap{position:relative;background:radial-gradient(ellipse at 30% 20%, rgba(76,141,255,0.08), transparent 60%), var(--surface-sunken, #0a0e1a);min-height:420px;}
-.map-canvas-wrap svg{display:block;width:100%;height:auto;}
+.map-canvas-wrap{position:relative;background:radial-gradient(ellipse at 30% 20%, rgba(76,141,255,0.08), transparent 60%), var(--surface-sunken, #0a0e1a);min-height:420px;overflow:hidden;}
+.map-basemap{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:0.8;filter:saturate(0.75) brightness(1.06);z-index:0;pointer-events:none;}
+.map-canvas-wrap svg{display:block;width:100%;height:auto;position:relative;z-index:1;}
 :fullscreen .map-card{border-radius:0;height:100vh;display:flex;flex-direction:column;}
 :fullscreen .map-canvas-wrap{flex:1;min-height:0;}
 :fullscreen .map-canvas-wrap svg{height:100%;}
+:fullscreen .map-basemap{height:100%;}
 .map-legend-badge{position:absolute;bottom:14px;left:14px;display:flex;align-items:center;gap:8px;background:rgba(10,14,26,0.82);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:10.8px;color:var(--text-tertiary);}
 .map-scale-badge{position:absolute;bottom:14px;left:14px;}
 .evidence-panel-card{padding:16px 18px;margin-bottom:14px;}
 .evidence-panel-title{display:flex;align-items:center;gap:8px;font-size:12.8px;font-weight:700;color:var(--text);margin-bottom:12px;}
 .evidence-panel-title svg{width:15px;height:15px;color:var(--blue-deep);}
+.sentinel-teaser-body{display:flex;align-items:center;gap:16px;margin-top:4px;}
+.sentinel-teaser-art{width:120px;height:68px;flex-shrink:0;}
+@media (max-width:640px){.sentinel-teaser-body{flex-direction:column;align-items:flex-start;}}
+.evidence-subhead{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;}
+.evidence-subhead svg{width:13px;height:13px;flex-shrink:0;color:var(--blue-deep);}
 .evidence-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;gap:10px;}
 .evidence-row:last-child{border-bottom:none;}
 .evidence-row .k{display:flex;align-items:center;gap:6px;color:var(--text-tertiary);font-weight:600;}
@@ -378,6 +386,11 @@ td.score-cell{font-family:'JetBrains Mono',monospace;font-weight:700;}
 .cluster-holder{padding:16px;}
 .campaign-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:16px;}
 .campaign-card{padding:20px 22px;cursor:pointer;transition:border-color .12s;}
+.campaign-card-head{display:flex;align-items:center;gap:12px;}
+.campaign-avatar-wrap{position:relative;width:40px;height:40px;flex-shrink:0;}
+.campaign-avatar{width:40px;height:40px;display:block;}
+.campaign-avatar-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;color:#fff;display:flex;}
+.campaign-avatar-icon svg{width:18px;height:18px;}
 .campaign-card:hover{border-color:var(--border-strong);}
 .campaign-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-tertiary);}
 .campaign-name{font-size:14.3px;font-weight:700;margin-top:4px;line-height:1.35;}
@@ -758,13 +771,12 @@ tbody tr.clickable:hover .subject-cell{color:var(--blue);}
       <div id="flow-steps"></div>
     </div>
     <nav class="nav" id="nav">
-      <button class="nav-item" data-nav="inbox"><span class="nav-num">1</span><span data-i18n="navInbox">Inbox</span></button>
-      <button class="nav-item" data-nav="overview"><span class="nav-num">2</span><span data-i18n="navOverview">Overview</span></button>
-      <button class="nav-item" data-nav="investigate"><span class="nav-num">3</span><span data-i18n="navInvestigate">Investigate Email</span></button>
-      <button class="nav-item" data-nav="origin"><span class="nav-num">4</span><span data-i18n="navOrigin">Trace Origin</span></button>
-      <button class="nav-item" data-nav="campaigns"><span class="nav-num">5</span><span data-i18n="navCampaigns">Campaign Intelligence</span></button>
-      <button class="nav-item" data-nav="report"><span class="nav-num">6</span><span data-i18n="navReport">Forensic Report</span></button>
-      <button class="nav-item" data-nav="plans"><span class="nav-num">7</span><span data-i18n="plansNav">Plans</span></button>
+      <button class="nav-item" data-nav="overview"><span class="nav-num">1</span><span data-i18n="navOverview">Overview</span></button>
+      <button class="nav-item" data-nav="investigate"><span class="nav-num">2</span><span data-i18n="navInvestigate">Investigate Email</span></button>
+      <button class="nav-item" data-nav="origin"><span class="nav-num">3</span><span data-i18n="navOrigin">Trace Origin</span></button>
+      <button class="nav-item" data-nav="campaigns"><span class="nav-num">4</span><span data-i18n="navCampaigns">Campaign Intelligence</span></button>
+      <button class="nav-item" data-nav="report"><span class="nav-num">5</span><span data-i18n="navReport">Forensic Report</span></button>
+      <button class="nav-item" data-nav="plans"><span class="nav-num">6</span><span data-i18n="plansNav">Plans</span></button>
     </nav>
     <div class="sidebar-footer">
       <div class="status-row"><span class="status-dot"></span><span class="status-text" data-i18n="allSystems">All systems <strong>operational</strong></span></div>
@@ -1588,7 +1600,7 @@ function renderPlans(){
       <div class="section-sub" style="margin-bottom:14px;">${tierMeta[tier].tag}</div>
       <div style="font-size:20px;font-weight:800;margin-bottom:14px;">${tier==='free'?'Free':tier==='sentinel'?'Premium':'Contact for Enterprise'}</div>
       <ul class="infer-list">
-        ${PLAN_FEATURES.filter(f=>f.tiers[0]===tier || (tier!=='free' && f.tiers.includes(tier) && f.tiers[0]===tier)).map(f=>`<li>${ic('check')}${f.label}${planStatusTag(f.key)}</li>`).join('')}
+        ${PLAN_FEATURES.filter(f=>f.tiers.includes(tier)).map(f=>`<li>${ic('check')}${f.label}${planStatusTag(f.key)}</li>`).join('')}
       </ul>
       ${tier===currentPlan?`<div class="badge b-low" style="margin-top:14px;">${tr('currentPlanLabel')}</div>`:''}
     </div>`).join('')}
@@ -1769,7 +1781,20 @@ function haveISeenThisBeforeHTML(e){
   return `<div class="card section-card" style="margin-bottom:16px;" id="hiswtb-card">
     <div class="section-head"><div><div class="section-title">${ic('search')} ${tr('haveSeenBefore')}</div><div class="section-sub">${tr('sentinelTeaserDesc')}</div></div>
     <span class="badge b-medium">🔒 SENTINEL</span></div>
-    <div class="ai-summary-text">${tr('sentinelTeaserDesc')}</div>
+    <div class="sentinel-teaser-body">
+      <svg class="sentinel-teaser-art" viewBox="0 0 160 90" aria-hidden="true">
+        <line x1="34" y1="45" x2="80" y2="22" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <line x1="34" y1="45" x2="80" y2="68" stroke="var(--border-strong)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <line x1="80" y1="22" x2="128" y2="45" stroke="var(--blue-deep)" stroke-width="1.6"/>
+        <line x1="80" y1="68" x2="128" y2="45" stroke="var(--blue-deep)" stroke-width="1.6"/>
+        <circle cx="34" cy="45" r="9" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>
+        <circle cx="80" cy="22" r="7" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>
+        <circle cx="80" cy="68" r="7" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>
+        <circle cx="128" cy="45" r="10" fill="var(--blue-bg)" stroke="var(--blue-deep)" stroke-width="1.8"/>
+        <circle cx="128" cy="45" r="3" fill="var(--blue-deep)"/>
+      </svg>
+      <div class="ai-summary-text">${tr('sentinelTeaserDesc')}</div>
+    </div>
     <button class="btn-primary" data-action="explore-sentinel" style="margin-top:12px;">${ic('search')}${tr('exploreSentinelBtn')}</button>
   </div>`;
 }
@@ -1926,10 +1951,11 @@ function renderOrigin(){
   <div class="origin-map-grid">
     <div class="card map-card" id="investigation-map-card">
       <div class="map-card-head">
-        <div class="map-card-title">${ic('compass')}${tr('investigationMap')}</div>
+        <div class="map-card-title">${ic('globe')}${tr('investigationMap')}</div>
         <button class="map-fullscreen-btn" data-action="toggle-map-fullscreen" id="map-fullscreen-btn">${ic('fullscreen')}<span>${tr('fullScreen')}</span></button>
       </div>
       <div class="map-canvas-wrap" id="map-canvas-wrap">
+        <img class="map-basemap" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" alt="" />
         <svg id="investigation-map" viewBox="0 0 800 460" width="100%"></svg>
         <div class="trace-banner">${ic('alert')}<div><div class="t">${tr('tracePathTitle')}</div><div class="d">${tr('tracePathDesc')}</div></div></div>
       </div>
@@ -1938,7 +1964,7 @@ function renderOrigin(){
     <div>
       <div class="card evidence-panel-card">
         <div class="evidence-panel-title">${ic('file')}${tr('evidencePanel')}</div>
-        <div style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">${ic('pin')} ${tr('originTrace')}</div>
+        <div class="evidence-subhead">${ic('globe')}${ic('pin')} ${tr('originTrace')}</div>
         <div class="evidence-row"><span class="k">${ic('server')}${tr('earliestObservableIp')}</span><span class="v mono">${e.hops[0].ip}</span></div>
         <div class="evidence-row"><span class="k">${ic('globe')}${tr('countryLbl')}</span><span class="v">${e.geo.country}</span></div>
         <div class="evidence-row"><span class="k">${ic('pin')}${tr('regionLbl')}</span><span class="v">${e.geo.city}</span></div>
@@ -2040,7 +2066,7 @@ function drawInvestigationMap(e){
       <circle cx="${node.x}" cy="${node.y}" r="7" fill="${node.accent}" opacity="0.35"/>
       <circle cx="${node.x}" cy="${node.y}" r="5" fill="${node.accent}"/>
       <rect x="${bx}" y="${by}" width="${boxW}" height="${boxH}" rx="8" fill="rgba(10,14,26,0.88)" stroke="${node.accent}" stroke-width="1" opacity="0.95"/>
-      <text x="${bx+12}" y="${by+17}" font-size="11.5" font-weight="700" fill="#111827" font-family="Inter, sans-serif">${node.label}</text>
+      <text x="${bx+12}" y="${by+17}" font-size="11.5" font-weight="700" fill="#f4f6fb" font-family="Inter, sans-serif">${node.label}</text>
       <text x="${bx+12}" y="${by+31}" font-size="10" fill="#93a0c2" font-family="'JetBrains Mono', monospace">${(node.sub||'').slice(0,26)}</text>
     </g>`;
   }
@@ -2054,16 +2080,14 @@ function drawInvestigationMap(e){
   }
   const branchLines = branches.map(b=>`<path d="M${ms.x} ${ms.y} L${b.x} ${b.y}" stroke="var(--border-strong)" stroke-width="1.3" stroke-dasharray="3 4" fill="none" opacity="0.7"/>`).join('');
 
-  // Sparse dot-grid backdrop (evokes a world map without claiming cartographic accuracy)
-  let dots = '';
-  for(let gx=20; gx<W; gx+=26){ for(let gy=20; gy<H; gy+=26){
-    const seed = Math.sin(gx*12.9898+gy*78.233)*43758.5453;
-    if((seed - Math.floor(seed)) > 0.72) dots += `<circle cx="${gx}" cy="${gy}" r="1.1" fill="#2a3255"/>`;
-  }}
+  // Backdrop is now the real world-map image (see .map-basemap) sitting
+  // beneath this transparent SVG layer, so no synthetic land shape is drawn
+  // here anymore — just the relay-chain graph on top of it.
+  const mapBackdrop = '';
 
   svg.innerHTML = `
     <rect x="0" y="0" width="${W}" height="${H}" fill="none"/>
-    ${dots}
+    ${mapBackdrop}
     <path d="${pathD}" stroke="var(--blue-deep)" stroke-width="1.8" stroke-dasharray="5 5" fill="none" opacity="0.75"/>
     ${branchLines}
     ${pts.map((p,i)=>labelGroup(p,i,pts.length)).join('')}
@@ -2170,8 +2194,17 @@ function renderCampaigns(){
     <svg id="cluster-svg" viewBox="0 0 900 220" width="100%" style="max-height:240px;"></svg>
   </div>
   <div class="campaign-grid">
-  ${camps.length ? camps.map(c=>`<div class="card campaign-card" data-action="open-campaign" data-id="${c.id}">
-    <div class="campaign-id">${c.id}</div><div class="campaign-name">${c.name}</div>
+  ${camps.length ? camps.map((c,i)=>{
+    const grads=['grad-terracotta','grad-peach','grad-lavender','grad-blue','grad-yellow','grad-mint'];
+    const g = grads[i%grads.length];
+    return `<div class="card campaign-card" data-action="open-campaign" data-id="${c.id}">
+    <div class="campaign-card-head">
+      <div class="campaign-avatar-wrap">
+        <svg class="campaign-avatar" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="url(#${g})"/></svg>
+        <span class="campaign-avatar-icon">${ic('relay')}</span>
+      </div>
+      <div><div class="campaign-id">${c.id}</div><div class="campaign-name">${c.name}</div></div>
+    </div>
     <div style="margin-top:10px;"><span class="badge ${bClass(c.risk)}">${c.risk.toUpperCase()}</span></div>
     <div class="campaign-stats">
       <div><div class="k">Emails</div><div class="v">${c.emails}</div></div>
@@ -2179,7 +2212,8 @@ function renderCampaigns(){
       <div><div class="k">Domains</div><div class="v">${c.domains.length}</div></div>
       <div><div class="k">IPs</div><div class="v">${c.ips.length}</div></div>
     </div>
-  </div>`).join('') : (MAILSCOPE.liveMode && MAILSCOPE.backendStatus==='online' ? `<div class="card" style="padding:26px;text-align:center;color:var(--text-tertiary);grid-column:1/-1;">${ic('info')}<div style="margin-top:8px;">No potential campaign relationships detected yet. Analyze two or more emails that share a domain, URL, IP, or attachment to see correlated cases here.</div></div>` : '')}
+  </div>`;
+  }).join('') : (MAILSCOPE.liveMode && MAILSCOPE.backendStatus==='online' ? `<div class="card" style="padding:26px;text-align:center;color:var(--text-tertiary);grid-column:1/-1;">${ic('info')}<div style="margin-top:8px;">No potential campaign relationships detected yet. Analyze two or more emails that share a domain, URL, IP, or attachment to see correlated cases here.</div></div>` : '')}
   </div>`;
 }
 function drawClusterViz(){
