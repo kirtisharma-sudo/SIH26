@@ -13,14 +13,10 @@ Instead of stopping at *“this email looks suspicious”*, MailScope brings tog
 ## Live Demo
 
 ### Frontend
-**GitHub Pages:**  
-
-
-### Backend API
-The frontend requires the MailScope FastAPI backend for live analysis.
+`https://kirtisharma-sudo.github.io/SIH26/`
 
 **Backend:**  
-`https://YOUR-BACKEND-URL`
+`https://mailscope-api.onrender.com`
 
 ---
 
